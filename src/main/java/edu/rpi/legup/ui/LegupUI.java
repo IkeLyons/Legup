@@ -74,7 +74,7 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
     protected JMenuItem newPuzzle, resetPuzzle, saveProof, preferences, exit;
 
     protected JMenu edit;
-    protected JMenuItem undo, redo;
+    protected JMenuItem undo, redo, createSTT;
 
     protected JMenu view;
 
@@ -208,6 +208,7 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
         edit = new JMenu("Edit");
         undo = new JMenuItem("Undo");
         redo = new JMenuItem("Redo");
+        createSTT = new JMenuItem("Create Short Truth Table");
 
         view = new JMenu("View");
 
@@ -337,6 +338,11 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
         if(os == "mac") redo.setAccelerator(KeyStroke.getKeyStroke('Y', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         else redo.setAccelerator(KeyStroke.getKeyStroke('Y', InputEvent.CTRL_DOWN_MASK));
 
+        edit.add(createSTT);
+        createSTT.addActionListener(l -> {
+            createShortTruthTable();
+        });
+
         mBar.add(proof);
 
         about.add(checkUpdates);
@@ -347,8 +353,7 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
 
         about.add(aboutLegup);
         aboutLegup.addActionListener(l -> {
-            // JOptionPane.showMessageDialog(null, "Version: 2.0.0");
-            createShortTruthTable();
+            JOptionPane.showMessageDialog(null, "Version: 2.0.0");
         });
 
         about.add(helpLegup);

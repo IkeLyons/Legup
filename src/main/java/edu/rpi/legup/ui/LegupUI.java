@@ -26,6 +26,7 @@ import edu.rpi.legup.model.Puzzle;
 import edu.rpi.legup.model.PuzzleExporter;
 import edu.rpi.legup.model.gameboard.Board;
 import edu.rpi.legup.model.tree.Tree;
+import edu.rpi.legup.save.ShortTruthTableExporter;
 import edu.rpi.legup.save.ExportFileException;
 import edu.rpi.legup.save.InvalidFileFormatException;
 import edu.rpi.legup.ui.boardview.BoardView;
@@ -346,7 +347,8 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
 
         about.add(aboutLegup);
         aboutLegup.addActionListener(l -> {
-            JOptionPane.showMessageDialog(null, "Version: 2.0.0");
+            // JOptionPane.showMessageDialog(null, "Version: 2.0.0");
+            createShortTruthTable();
         });
 
         about.add(helpLegup);
@@ -496,6 +498,46 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
                     throw new ExportFileException("Puzzle exporter null");
                 }
                 exporter.exportPuzzle(fileName);
+            } catch (ExportFileException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /** 
+     * Generates a short truth table file
+     */
+    private void createShortTruthTable() {
+        String userenters;
+        userenters= JOptionPane.showInputDialog ("~ for negation\n^ for conjunction\n| for disjunction\n> for implication\n- for the biconditional");
+        int i= Integer.parseInt(userenters);
+        
+        JOptionPane.showMessageDialog(null, "You entered the number" + i + ".");
+
+        fileDialog.setMode(FileDialog.SAVE);
+        fileDialog.setTitle("Save Proof");
+        String curFileName = GameBoardFacade.getInstance().getCurFileName();
+        // if (curFileName == null) {
+            
+        // } else {
+        //     File curFile = new File(curFileName);
+        //     fileDialog.setDirectory(curFile.getParent());
+        // }
+        fileDialog.setDirectory(LegupPreferences.getInstance().getUserPref(LegupPreferences.WORK_DIRECTORY));
+        fileDialog.setVisible(true);
+
+        String fileName = null;
+        if (fileDialog.getDirectory() != null && fileDialog.getFile() != null) {
+            fileName = fileDialog.getDirectory() + File.separator + fileDialog.getFile();
+        }
+
+        if (fileName != null) {
+            try {
+                ShortTruthTableExporter exporter = new ShortTruthTableExporter();
+                if (exporter == null) {
+                    throw new ExportFileException("Puzzle exporter null");
+                }
+                exporter.exportTruthTable(fileName);
             } catch (ExportFileException e) {
                 e.printStackTrace();
             }

@@ -508,21 +508,29 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
      * Generates a short truth table file
      */
     private void createShortTruthTable() {
+        String inputNum;
+        inputNum = JOptionPane.showInputDialog("How many Premises are there?");
+        int numPremises = Integer.parseInt(inputNum);
+
+        String[] premises = new String[numPremises + 1];
+        String instructionText = "~ for negation\n^ for conjunction\n| for disjunction\n> for implication\n- for the biconditional";
+        for(int i = 0; i < numPremises; i++){
+            String userenters;
+            userenters= JOptionPane.showInputDialog("Premise #" + (i + 1) + "\n\n" + instructionText);
+            premises[i] = userenters;
+        }
+
         String userenters;
-        userenters= JOptionPane.showInputDialog ("~ for negation\n^ for conjunction\n| for disjunction\n> for implication\n- for the biconditional");
-        int i= Integer.parseInt(userenters);
-        
-        JOptionPane.showMessageDialog(null, "You entered the number" + i + ".");
+        userenters= JOptionPane.showInputDialog("Goal\n\n" + instructionText); 
+        premises[numPremises] = userenters;
+
+        for(int i = 0; i < premises.length; i++){
+            JOptionPane.showMessageDialog(null, premises[i]);
+        }
+       
 
         fileDialog.setMode(FileDialog.SAVE);
         fileDialog.setTitle("Save Proof");
-        String curFileName = GameBoardFacade.getInstance().getCurFileName();
-        // if (curFileName == null) {
-            
-        // } else {
-        //     File curFile = new File(curFileName);
-        //     fileDialog.setDirectory(curFile.getParent());
-        // }
         fileDialog.setDirectory(LegupPreferences.getInstance().getUserPref(LegupPreferences.WORK_DIRECTORY));
         fileDialog.setVisible(true);
 

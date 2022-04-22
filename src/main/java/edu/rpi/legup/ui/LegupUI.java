@@ -528,7 +528,7 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
 
         String fileName = null;
         if (fileDialog.getDirectory() != null && fileDialog.getFile() != null) {
-            fileName = fileDialog.getDirectory() + File.separator + fileDialog.getFile();
+            fileName = fileDialog.getDirectory() + File.separator + fileDialog.getFile() + ".xml";
         }
 
         if (fileName != null) {

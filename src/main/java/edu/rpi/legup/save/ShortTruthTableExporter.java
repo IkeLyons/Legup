@@ -27,21 +27,21 @@ public class ShortTruthTableExporter {
     */
     public ShortTruthTableExporter() throws ExportFileException{
         try {
-        dbFactory = DocumentBuilderFactory.newInstance();
-        dbuilder = dbFactory.newDocumentBuilder();
-        document = dbuilder.newDocument();
-        legup = document.createElement("Legup");
-        puzzle = document.createElement("puzzle");
-        board = document.createElement("board");
-        data = document.createElement("data");
-        //Base Short Truth Table Elements
-        document.appendChild(legup); 
-        legup.setAttribute("version", "3.0.0");
-        legup.appendChild(puzzle); 
-        puzzle.setAttribute("name", "ShortTruthTable");
-        puzzle.appendChild(board);
-        board.appendChild(data);
-        data.setAttribute("normal", "true");
+            dbFactory = DocumentBuilderFactory.newInstance();
+            dbuilder = dbFactory.newDocumentBuilder();
+            document = dbuilder.newDocument();
+            legup = document.createElement("Legup");
+            puzzle = document.createElement("puzzle");
+            board = document.createElement("board");
+            data = document.createElement("data");
+            //Base Short Truth Table Elements
+            document.appendChild(legup); 
+            legup.setAttribute("version", "3.0.0");
+            legup.appendChild(puzzle); 
+            puzzle.setAttribute("name", "ShortTruthTable");
+            puzzle.appendChild(board);
+            board.appendChild(data);
+            data.setAttribute("normal", "true");
         } catch (ParserConfigurationException e) {
             throw new ExportFileException("Puzzle Exporter: parser configuration exception");
         } catch (Exception e) {

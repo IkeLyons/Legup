@@ -26,7 +26,7 @@ import edu.rpi.legup.model.Puzzle;
 import edu.rpi.legup.model.PuzzleExporter;
 import edu.rpi.legup.model.gameboard.Board;
 import edu.rpi.legup.model.tree.Tree;
-import edu.rpi.legup.save.ShortTruthTableExporter;
+import edu.rpi.legup.save.ShortTruthTableCreator;
 import edu.rpi.legup.save.ExportFileException;
 import edu.rpi.legup.save.InvalidFileFormatException;
 import edu.rpi.legup.ui.boardview.BoardView;
@@ -529,31 +529,29 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
         userenters= JOptionPane.showInputDialog("Goal\n\n" + instructionText); 
         premises[numPremises] = userenters;
 
-        for(int i = 0; i < premises.length; i++){
-            JOptionPane.showMessageDialog(null, premises[i]);
-        }
-       
-
-        fileDialog.setMode(FileDialog.SAVE);
-        fileDialog.setTitle("Save Proof");
-        fileDialog.setDirectory(LegupPreferences.getInstance().getUserPref(LegupPreferences.WORK_DIRECTORY));
-        fileDialog.setVisible(true);
-
-        String fileName = null;
-        if (fileDialog.getDirectory() != null && fileDialog.getFile() != null) {
-            fileName = fileDialog.getDirectory() + File.separator + fileDialog.getFile() + ".xml";
-        }
-
-        if (fileName != null) {
-            try {
-                ShortTruthTableExporter exporter = new ShortTruthTableExporter();
-                if (exporter == null) {
-                    throw new ExportFileException("Puzzle exporter null");
-                }
-                exporter.exportTruthTable(fileName);
-            } catch (ExportFileException e) {
-                e.printStackTrace();
+        try {
+            ShortTruthTableCreator creator = new ShortTruthTableCreator(premises);
+            if (creator == null) {
+                throw new ExportFileException("Puzzle exporter null");
             }
+
+            fileDialog.setMode(FileDialog.SAVE);
+            fileDialog.setTitle("Save Proof");
+            fileDialog.setDirectory(LegupPreferences.getInstance().getUserPref(LegupPreferences.WORK_DIRECTORY));
+            fileDialog.setVisible(true);
+
+            String fileName = null;
+            if (fileDialog.getDirectory() != null && fileDialog.getFile() != null) {
+                fileName = fileDialog.getDirectory() + File.separator + fileDialog.getFile() + ".xml";
+            }
+
+            if (fileName != null) {
+                creator.exportTruthTable(fileName);
+            }
+        } catch (ExportFileException | InvalidFileFormatException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            LOGGER.error(e.getMessage());
+            createShortTruthTable();
         }
     }
 

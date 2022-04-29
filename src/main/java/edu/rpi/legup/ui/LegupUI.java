@@ -518,7 +518,7 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
         int numPremises = Integer.parseInt(inputNum);
 
         String[] premises = new String[numPremises + 1];
-        String instructionText = "~ for negation\n^ for conjunction\n| for disjunction\n> for implication\n- for the biconditional";
+        String instructionText = "Enter the line with:\n~ for negation\n^ for conjunction\n| for disjunction\n> for implication\n- for the biconditional";
         for(int i = 0; i < numPremises; i++){
             String userenters;
             userenters= JOptionPane.showInputDialog("Premise #" + (i + 1) + "\n\n" + instructionText);
@@ -526,7 +526,7 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
         }
 
         String userenters;
-        userenters= JOptionPane.showInputDialog("Goal\n\n" + instructionText); 
+        userenters= JOptionPane.showInputDialog("Goal (Note that this is automatically negated)\n\n" + instructionText); 
         premises[numPremises] = userenters;
 
         try {
@@ -548,6 +548,18 @@ public class LegupUI extends JFrame implements WindowListener, IHistoryListener 
             if (fileName != null) {
                 creator.exportTruthTable(fileName);
             }
+
+            //open the file if it was succesfully created
+            File puzzleFile = new File(fileName);
+            if (puzzleFile != null && puzzleFile.exists()) {
+            try {
+                GameBoardFacade.getInstance().loadPuzzle(fileName);
+                String puzzleName = GameBoardFacade.getInstance().getPuzzleModule().getName();
+                setTitle(puzzleName + " - " + puzzleFile.getName());
+            } catch (InvalidFileFormatException e) {
+                LOGGER.error(e.getMessage());
+            }
+        }
         } catch (ExportFileException | InvalidFileFormatException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
             LOGGER.error(e.getMessage());
